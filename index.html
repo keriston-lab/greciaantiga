@@ -6,52 +6,50 @@
     <title>Linha do Tempo Crítica da Antiguidade</title>
     <style>
         :root {
-            --bg-color: #12141c;
-            --text-main: #e2e8f0;
-            --text-muted: #94a3b8;
-            --border-color: #2e3440;
+            --bg-color: #0b0f19;
+            --card-bg: #111827;
+            --text-main: #e5e7eb;
+            --text-muted: #9ca3af;
+            --border-color: #1f2937;
             
-            /* Paleta Desaturada para os Períodos */
-            --color-trevas: #2d3748;
-            --color-arcaico: #c2783c;
-            --color-classico: #3182ce;
-            --color-helenistico: #805ad5;
-            --color-republica: #9b2c2c;
-            --color-imperio: #b7791f;
+            /* Cores dos blocos da imagem */
+            --color-trevas: #1e293b;
+            --color-arcaico: #b45309;
+            --color-classico: #1d4ed8;
+            --color-helenistico: #6d28d9;
+            --color-republica: #991b1b;
+            --color-imperio: #b45309;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
-            line-height: 1.6;
+            line-height: 1.5;
             padding: 40px 20px;
         }
 
         .container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
         header {
             text-align: center;
-            margin-bottom: 50px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 30px;
+            margin-bottom: 40px;
         }
 
         header h1 {
-            font-size: 2.2rem;
+            font-size: 2rem;
             font-weight: 700;
-            color: #fff;
-            margin-bottom: 10px;
-            letter-spacing: -0.5px;
+            color: #ffffff;
+            margin-bottom: 8px;
         }
 
         header p {
@@ -59,30 +57,40 @@
             font-size: 1.1rem;
         }
 
-        /* Estrutura da Linha do Tempo */
-        .timeline {
-            position: relative;
-            padding-left: 20px;
-            border-left: 2px solid var(--border-color);
+        /* Layout Duas Colunas */
+        .timeline-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .column-title {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
         }
 
         /* Blocos de Período */
         .period-block {
-            margin-bottom: 40px;
-            border-radius: 8px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            background: #1a1f2c;
         }
 
         .period-header {
-            padding: 20px;
+            padding: 16px 20px;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: background 0.2s ease;
             user-select: none;
+            transition: filter 0.2s;
         }
 
         .period-header:hover {
@@ -90,122 +98,152 @@
         }
 
         .period-title {
-            font-size: 1.25rem;
             font-weight: 600;
-            color: #fff;
+            font-size: 1.1rem;
+            color: #ffffff;
         }
 
         .period-date {
-            font-size: 0.95rem;
-            font-weight: 500;
-            opacity: 0.85;
-            background: rgba(0, 0, 0, 0.2);
+            font-size: 0.85rem;
+            background: rgba(0,0,0,0.25);
             padding: 4px 10px;
             border-radius: 4px;
+            color: rgba(255,255,255,0.9);
         }
 
-        .period-content {
-            max-height: 0;
+        /* Sistema de Accordion usando CSS Grid */
+        .accordion-wrapper {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.3s ease;
+        }
+
+        .period-block.open > .accordion-wrapper,
+        .event-item.open > .accordion-wrapper {
+            grid-template-rows: 1fr;
+        }
+
+        .accordion-content {
             overflow: hidden;
-            transition: max-height 0.3s ease-out;
-            background: rgba(0, 0, 0, 0.15);
+        }
+
+        .period-inner-content {
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
         }
 
         .period-text {
-            padding: 20px;
-            border-top: 1px solid var(--border-color);
             color: var(--text-main);
-            font-size: 1rem;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
         }
 
-        /* Sub-itens: Eventos e Obras */
-        .events-list {
-            padding: 10px 20px 20px 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        /* Layout Interno: Eventos e Obras */
+        .split-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
         }
 
-        .events-list h4 {
-            font-size: 0.9rem;
+        .split-col h4 {
+            font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 1px;
             color: var(--text-muted);
-            margin-bottom: 15px;
-            margin-top: 10px;
+            margin-bottom: 12px;
         }
 
+        .empty-state {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            padding-left: 14px;
+        }
+
+        /* Itens de Eventos/Obras */
         .event-item {
-            margin-bottom: 12px;
-            border-radius: 6px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 8px;
         }
 
         .event-trigger {
-            padding: 14px 16px;
-            cursor: pointer;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            user-select: none;
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 4px;
             transition: background 0.2s;
+            user-select: none;
+        }
+
+        .event-trigger:before {
+            content: "•";
+            color: var(--text-muted);
+            margin-right: 8px;
+            font-size: 1.2rem;
+            line-height: 1;
         }
 
         .event-trigger:hover {
-            background: rgba(255, 255, 255, 0.05);
+            background-color: rgba(255,255,255,0.05);
         }
 
         .event-name {
+            font-size: 0.9rem;
             font-weight: 500;
-            font-size: 1rem;
-            color: #e2e8f0;
-        }
-
-        .event-meta {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            white-space: nowrap;
-            margin-left: 10px;
-        }
-
-        .event-body {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.25s ease-out;
-            background: rgba(0, 0, 0, 0.2);
         }
 
         .event-desc {
-            padding: 16px;
-            font-size: 0.95rem;
-            color: #cbd5e1;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            border-left: 3px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 10px 10px 24px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-left: 2px solid var(--border-color);
+            margin-left: 14px;
+            margin-top: 4px;
+            margin-bottom: 8px;
         }
 
-        /* Setas indicadoras de expansão */
+        /* Setas */
         .icon-arrow {
-            transition: transform 0.2s ease;
             fill: currentColor;
-            opacity: 0.7;
+            opacity: 0.6;
+            transition: transform 0.3s ease;
+            margin-left: 10px;
         }
-
-        .active .icon-arrow {
+        
+        .period-block.open > .period-header .icon-arrow,
+        .event-item.open > .event-trigger .icon-arrow {
             transform: rotate(180deg);
         }
 
-        /* Cores customizadas por bloco */
-        .p-trevas { background-color: var(--color-trevas); }
-        .p-arcaico { background-color: var(--color-arcaico); }
-        .p-classico { background-color: var(--color-classico); }
-        .p-helenistico { background-color: var(--color-helenistico); }
-        .p-republica { background-color: var(--color-republica); }
-        .p-imperio { background-color: var(--color-imperio); }
+        /* Cores Temáticas */
+        .bg-trevas { background-color: var(--color-trevas); }
+        .bg-arcaico { background-color: var(--color-arcaico); }
+        .bg-classico { background-color: var(--color-classico); }
+        .bg-helenistico { background-color: var(--color-helenistico); }
+        .bg-republica { background-color: var(--color-republica); }
+        .bg-imperio { background-color: var(--color-imperio); }
 
+        @media (max-width: 900px) {
+            .timeline-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
         @media (max-width: 600px) {
-            body { padding: 20px 10px; }
-            .period-header { flex-direction: column; align-items: flex-start; gap: 8px; }
-            .event-trigger { flex-direction: column; align-items: flex-start; gap: 4px; }
-            .event-meta { margin-left: 0; }
+            .split-content {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            .period-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .icon-arrow {
+                position: absolute;
+                right: 20px;
+                top: 20px;
+            }
+            .period-header { position: relative; }
         }
     </style>
 </head>
@@ -217,355 +255,288 @@
         <p>Uma investigação visual sobre Percepção, Estruturas de Poder e a Desconstrução de Discursos Narrativos.</p>
     </header>
 
-    <div class="timeline">
+    <div class="timeline-grid">
+        <!-- COLUNA GRÉCIA -->
+        <div class="column-greece">
+            <h2 class="column-title">Grécia</h2>
 
-        <!-- IDADE DAS TREVAS GREGA -->
-        <div class="period-block">
-            <div class="period-header p-trevas" onclick="toggleAccordion(this)">
-                <span class="period-title">Idade das Trevas Grega</span>
-                <span class="period-date">c. 1100 a.C. – 800 a.C.</span>
-                <svg class="icon-arrow" width="16" height="16" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-            </div>
-            <div class="period-content">
-                <div class="period-text">
-                    Período marcado pelo colapso da civilização micênica, destruição de palácios e ausência de registros escritos. Longe de ser apenas um "vazio", foi o caldeirão silencioso onde a tradição oral gestou a base mítica ocidental, operando à margem de instituições centralizadoras de poder.
+            <!-- Idade das Trevas -->
+            <div class="period-block">
+                <div class="period-header bg-trevas" onclick="this.parentElement.classList.toggle('open')">
+                    <span class="period-title">Idade das Trevas Grega</span>
+                    <span class="period-date">c. 1100 a.C. — 800 a.C.</span>
+                    <svg class="icon-arrow" width="16" height="16" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                </div>
+                <div class="accordion-wrapper">
+                    <div class="accordion-content">
+                        <div class="period-inner-content">
+                            <div class="period-text">
+                                Período marcado pelo colapso da civilização micênica. Longe de ser apenas um "vazio", foi o caldeirão silencioso onde a tradição oral gestou a base mítica ocidental, operando à margem de instituições centralizadoras de poder.
+                            </div>
+                            <div class="split-content">
+                                <div class="split-col">
+                                    <h4>EVENTOS:</h4>
+                                    <div class="empty-state">—</div>
+                                </div>
+                                <div class="split-col">
+                                    <h4>OBRAS / TEXTOS:</h4>
+                                    <div class="empty-state">—</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <!-- Período Arcaico -->
+            <div class="period-block">
+                <div class="period-header bg-arcaico" onclick="this.parentElement.classList.toggle('open')">
+                    <span class="period-title">Período Arcaico Grego</span>
+                    <span class="period-date">c. 800 a.C. — 480 a.C.</span>
+                    <svg class="icon-arrow" width="16" height="16" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                </div>
+                <div class="accordion-wrapper">
+                    <div class="accordion-content">
+                        <div class="period-inner-content">
+                            <div class="period-text">
+                                Nascimento das Polis (cidades-estado). Aqui, os mitos deixam de ser apenas narrativas rituais e passam a ser fixados em obras que tentam organizar a estrutura cósmica e a hierarquia do poder.
+                            </div>
+                            <div class="split-content">
+                                <div class="split-col">
+                                    <h4>EVENTOS:</h4>
+                                    <div class="event-item">
+                                        <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
+                                            <span class="event-name">Primeiros Jogos Olímpicos</span>
+                                        </div>
+                                        <div class="accordion-wrapper">
+                                            <div class="accordion-content">
+                                                <div class="event-desc">Unificou culturalmente os povos gregos, transformando a violência guerreira em espetáculo ritualizado.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="split-col">
+                                    <h4>OBRAS / TEXTOS:</h4>
+                                    <div class="event-item">
+                                        <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
+                                            <span class="event-name">Ilíada e Odisseia (Homero)</span>
+                                        </div>
+                                        <div class="accordion-wrapper">
+                                            <div class="accordion-content">
+                                                <div class="event-desc">Sob o verniz das batalhas, esconde-se a primeira anatomia da fragilidade humana frente às forças institucionais.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="event-item">
+                                        <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
+                                            <span class="event-name">Teogonia (Hesíodo)</span>
+                                        </div>
+                                        <div class="accordion-wrapper">
+                                            <div class="accordion-content">
+                                                <div class="event-desc">Sistematiza o poder de Zeus. Registro seminal do <strong>Mito de Prometeu</strong>: a eterna tensão entre autonomia técnica humana e punição arbitrária.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Período Clássico -->
+            <div class="period-block">
+                <div class="period-header bg-classico" onclick="this.parentElement.classList.toggle('open')">
+                    <span class="period-title">Período Clássico Grego</span>
+                    <span class="period-date">480 a.C. — 323 a.C.</span>
+                    <svg class="icon-arrow" width="16" height="16" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                </div>
+                <div class="accordion-wrapper">
+                    <div class="accordion-content">
+                        <div class="period-inner-content">
+                            <div class="period-text">
+                                O auge filosófico e político de Atenas. Sob a razão e democracia, floresce o imperialismo. Berço das obras que rasgaram o discurso oficial e mergulharam na falha da percepção humana.
+                            </div>
+                            <div class="split-content">
+                                <div class="split-col">
+                                    <h4>EVENTOS:</h4>
+                                    <div class="event-item">
+                                        <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
+                                            <span class="event-name">Governo de Péricles</span>
+                                        </div>
+                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">Apogeu de Atenas que alimentou a arrogância institucional.</div></div></div>
+                                    </div>
+                                    <div class="event-item">
+                                        <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
+                                            <span class="event-name">Guerra do Peloponeso</span>
+                                        </div>
+                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">Conflito destrutivo entre Atenas e Esparta, colapsando o ideal helênico.</div></div></div>
+                                    </div>
+                                    <div class="event-item">
+                                        <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
+                                            <span class="event-name">Condenação de Sócrates</span>
+                                        </div>
+                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">A instituição elimina o elemento que forçava o questionamento das ilusões.</div></div></div>
+                                    </div>
+                                </div>
+                                <div class="split-col">
+                                    <h4>OBRAS / TEXTOS:</h4>
+                                    <div class="event-item">
+                                        <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
+                                            <span class="event-name">Antígona (Sófocles)</span>
+                                        </div>
+                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">Embate destrutivo entre a lei do Estado (Creonte) e a ética do sujeito (Antígona).</div></div></div>
+                                    </div>
+                                    <div class="event-item">
+                                        <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
+                                            <span class="event-name">Édipo Rei (Sófocles)</span>
+                                        </div>
+                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">A cegueira do ego. Uma lição sobre como a nossa percepção consciente falha frente a forças estruturais.</div></div></div>
+                                    </div>
+                                    <div class="event-item">
+                                        <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
+                                            <span class="event-name">As Bacantes (Eurípides)</span>
+                                        </div>
+                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">O retorno avassalador do reprimido. O irracional destroça o rei que tentou recalcar as pulsões por lei.</div></div></div>
+                                    </div>
+                                    <div class="event-item">
+                                        <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
+                                            <span class="event-name">A República (Platão)</span>
+                                        </div>
+                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">Contém a <strong>Alegoria da Caverna</strong>: a mecânica da alienação institucionalizada e a dor da percepção real.</div></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Período Helenístico -->
+            <div class="period-block">
+                <div class="period-header bg-helenistico" onclick="this.parentElement.classList.toggle('open')">
+                    <span class="period-title">Período Helenístico</span>
+                    <span class="period-date">323 a.C. — 31 a.C.</span>
+                    <svg class="icon-arrow" width="16" height="16" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                </div>
+                <div class="accordion-wrapper">
+                    <div class="accordion-content">
+                        <div class="period-inner-content">
+                            <div class="period-text">
+                                A Polis perde autonomia e os cidadãos integram impérios vastos. A filosofia abandona o projeto de Estado e passa a buscar ferramentas de blindagem psicológica (Estoicismo/Epicurismo).
+                            </div>
+                            <div class="split-content">
+                                <div class="split-col">
+                                    <h4>EVENTOS:</h4>
+                                    <div class="event-item">
+                                        <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
+                                            <span class="event-name">Alexandre, o Grande</span>
+                                        </div>
+                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">Unificação forçada e expansão militar, espalhando a cultura helênica sob um poder centralizado.</div></div></div>
+                                    </div>
+                                </div>
+                                <div class="split-col">
+                                    <h4>OBRAS / TEXTOS:</h4>
+                                    <div class="empty-state">—</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
-        <!-- PERÍODO ARCAICO GREGO -->
-        <div class="period-block">
-            <div class="period-header p-arcaico" onclick="toggleAccordion(this)">
-                <span class="period-title">Período Arcaico Grego</span>
-                <span class="period-date">c. 800 a.C. – 480 a.C.</span>
-                <svg class="icon-arrow" width="16" height="16" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-            </div>
-            <div class="period-content">
-                <div class="period-text">
-                    Época do ressurgimento da escrita, nascimento das primeiras Polis (cidades-estado) e expansão colonial. Aqui, os mitos deixam de ser apenas narrativas rituais e passam a ser fixados em obras que tentam organizar a estrutura cósmica e a hierarquia do poder.
+        <!-- COLUNA ROMA -->
+        <div class="column-rome">
+            <h2 class="column-title">Roma</h2>
+
+            <!-- República Romana -->
+            <div class="period-block">
+                <div class="period-header bg-republica" onclick="this.parentElement.classList.toggle('open')">
+                    <span class="period-title">República Romana</span>
+                    <span class="period-date">509 a.C. — 27 a.C.</span>
+                    <svg class="icon-arrow" width="16" height="16" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                 </div>
-                <div class="events-list">
-                    <h4>Obras e Eventos Canônicos</h4>
-                    
-                    <div class="event-item">
-                        <div class="event-trigger" onclick="toggleAccordion(this)">
-                            <span class="event-name">Ilíada e Odisseia (Homero)</span>
-                            <span class="event-meta">c. 750 a.C.</span>
-                            <svg class="icon-arrow" width="12" height="12" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                        </div>
-                        <div class="event-body">
-                            <div class="event-desc">
-                                Atribuídas a Homero, estas epopeias fundaram o ideal de excelência heroica (Areté). Sob o verniz das batalhas e conquistas, esconde-se a primeira grande anatomia da fragilidade humana frente ao capricho das forças institucionais e cósmicas (os Deuses).
+                <div class="accordion-wrapper">
+                    <div class="accordion-content">
+                        <div class="period-inner-content">
+                            <div class="period-text">
+                                Estabelecimento de um complexo sistema de freios institucionais gerido pelo Senado. Colapsou devido às contradições internas e ambições de generais autocráticos.
+                            </div>
+                            <div class="split-content">
+                                <div class="split-col">
+                                    <h4>EVENTOS:</h4>
+                                    <div class="event-item">
+                                        <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
+                                            <span class="event-name">Assassinato de Júlio César</span>
+                                        </div>
+                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">Choque entre a velha estrutura republicana e o avanço do poder pessoal. Precipita o fim da República.</div></div></div>
+                                    </div>
+                                </div>
+                                <div class="split-col">
+                                    <h4>OBRAS / TEXTOS:</h4>
+                                    <div class="empty-state">—</div>
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="event-item">
-                        <div class="event-trigger" onclick="toggleAccordion(this)">
-                            <span class="event-name">Teogonia (Hesíodo)</span>
-                            <span class="event-meta">c. 700 a.C.</span>
-                            <svg class="icon-arrow" width="12" height="12" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                        </div>
-                        <div class="event-body">
-                            <div class="event-desc">
-                                Obra de Hesíodo que sistematiza o nascimento dos deuses e a consolidação do poder supremo de Zeus. É onde encontramos o registro seminal do <strong>Mito de Prometeu</strong>: a transgressão primordial do roubo do fogo, estabelecendo a eterna tensão entre a busca humana por autonomia técnica e a punição arbitrária da autoridade centralizada.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="event-item">
-                        <div class="event-trigger" onclick="toggleAccordion(this)">
-                            <span class="event-name">Primeiros Jogos Olímpicos</span>
-                            <span class="event-meta">776 a.C.</span>
-                            <svg class="icon-arrow" width="12" height="12" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                        </div>
-                        <div class="event-body">
-                            <div class="event-desc">
-                                Evento canônico que unificou culturalmente os povos gregos dispersos sob uma mesma moldura mitológica e competitiva, transformando a violência guerreira em espetáculo ritualizado.
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
+
+            <!-- Império Romano -->
+            <div class="period-block">
+                <div class="period-header bg-imperio" onclick="this.parentElement.classList.toggle('open')">
+                    <span class="period-title">Império Romano</span>
+                    <span class="period-date">27 a.C. — 476 d.C.</span>
+                    <svg class="icon-arrow" width="16" height="16" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                </div>
+                <div class="accordion-wrapper">
+                    <div class="accordion-content">
+                        <div class="period-inner-content">
+                            <div class="period-text">
+                                Centralização total do poder em um autocrata. Diante de tiranias estatais imprevisíveis, o pensamento estóico torna-se um código rigoroso de sobrevivência mental.
+                            </div>
+                            <div class="split-content">
+                                <div class="split-col">
+                                    <h4>EVENTOS:</h4>
+                                    <div class="event-item">
+                                        <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
+                                            <span class="event-name">Ascensão de Augusto</span>
+                                        </div>
+                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">Construção do discurso da "Pax Romana", ocultando a centralização total das decisões.</div></div></div>
+                                    </div>
+                                    <div class="event-item">
+                                        <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
+                                            <span class="event-name">Tirania de Nero</span>
+                                        </div>
+                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">Desequilíbrio absolutista e expurgos senatoriais. O poder estatal em sua forma mais volátil.</div></div></div>
+                                    </div>
+                                    <div class="event-item">
+                                        <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
+                                            <span class="event-name">Governo de Marco Aurélio</span>
+                                        </div>
+                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">O imperador aplica o estoicismo para suportar o fardo de gerenciar as fronteiras em colapso.</div></div></div>
+                                    </div>
+                                </div>
+                                <div class="split-col">
+                                    <h4>OBRAS / TEXTOS:</h4>
+                                    <div class="event-item">
+                                        <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
+                                            <span class="event-name">Cartas a Lucílio (Sêneca)</span>
+                                        </div>
+                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">Tratado de sobrevivência psicológica contra a psicopatia do poder de Nero e as ilusões de prestígio social.</div></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
-
-        <!-- REPÚBLICA ROMANA -->
-        <div class="period-block">
-            <div class="period-header p-republica" onclick="toggleAccordion(this)">
-                <span class="period-title">República Romana</span>
-                <span class="period-date">509 a.C. – 27 a.C.</span>
-                <svg class="icon-arrow" width="16" height="16" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-            </div>
-            <div class="period-content">
-                <div class="period-text">
-                    Período em que Roma destrona a monarquia de herança etrusca e estabelece um complexo sistema de freios institucionais gerido pelo Senado e por Magistrados. Uma era de expansão militar agressiva que acabou colapsando devido às contradições internas e ambições de generais autocráticos.
-                </div>
-                <div class="events-list">
-                    <h4>Obras e Eventos Canônicos</h4>
-
-                    <div class="event-item">
-                        <div class="event-trigger" onclick="toggleAccordion(this)">
-                            <span class="event-name">Assassinato de Júlio César</span>
-                            <span class="event-meta">44 a.C.</span>
-                            <svg class="icon-arrow" width="12" height="12" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                        </div>
-                        <div class="event-body">
-                            <div class="event-desc">
-                                Os idos de março. O ápice do choque entre a velha estrutura institucional republicana que tentava se autopreservar e o avanço inevitável do poder pessoal centralizado. O assassinato precipita o fim prático da República.
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <!-- PERÍODO CLÁSSICO GREGO -->
-        <div class="period-block">
-            <div class="period-header p-classico" onclick="toggleAccordion(this)">
-                <span class="period-title">Período Clássico Grego</span>
-                <span class="period-date">480 a.C. – 323 a.C.</span>
-                <svg class="icon-arrow" width="16" height="16" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-            </div>
-            <div class="period-content">
-                <div class="period-text">
-                    O auge filosófico, teatral e político de Atenas. Sob o pretexto da razão e da democracia, floresce também o imperialismo militar. É o berço das tragédias e diálogos que rasgaram o discurso oficial do Estado e mergulharam no inconsciente e na falha da percepção humana.
-                </div>
-                <div class="events-list">
-                    <h4>Obras e Eventos Canônicos</h4>
-
-                    <div class="event-item">
-                        <div class="event-trigger" onclick="toggleAccordion(this)">
-                            <span class="event-name">Governo de Péricles em Atenas</span>
-                            <span class="event-meta">461 – 429 a.C.</span>
-                            <svg class="icon-arrow" width="12" height="12" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                        </div>
-                        <div class="event-body">
-                            <div class="event-desc">
-                                Apogeu político, artístico e democrático de Atenas. Período que financiou as grandes obras, mas que também alimentou a arrogância institucional que arrastou a Grécia para a guerra autodestrutiva.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="event-item">
-                        <div class="event-trigger" onclick="toggleAccordion(this)">
-                            <span class="event-name">Antígona (Sófocles)</span>
-                            <span class="event-meta">441 a.C.</span>
-                            <svg class="icon-arrow" width="12" height="12" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                        </div>
-                        <div class="event-body">
-                            <div class="event-desc">
-                                Sófocles apresenta o embate destrutivo entre a lei arbitrária do Estado (representada pelo Rei Creonte) e o desejo/ética irredutível do sujeito (Antígona). Uma denúncia brutal de como as instituições instrumentalizam a legalidade para sufocar a moral individual.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="event-item">
-                        <div class="event-trigger" onclick="toggleAccordion(this)">
-                            <span class="event-name">Guerra do Peloponeso</span>
-                            <span class="event-meta">431 – 404 a.C.</span>
-                            <svg class="icon-arrow" width="12" height="12" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                        </div>
-                        <div class="event-body">
-                            <div class="event-desc">
-                                Conflito fratricida total entre a Liga de Delos (liderada por Atenas) e a Liga do Peloponeso (Esparta). O colapso prático do ideal de união helênica e o suicídio geopolítico das Polis clássicas.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="event-item">
-                        <div class="event-trigger" onclick="toggleAccordion(this)">
-                            <span class="event-name">Édipo Rei (Sófocles)</span>
-                            <span class="event-meta">429 a.C.</span>
-                            <svg class="icon-arrow" width="12" height="12" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                        </div>
-                        <div class="event-body">
-                            <div class="event-desc">
-                                A obra-prima sobre a cegueira do ego. Édipo busca o criminoso que corrompe sua cidade, apenas para descobrir que o culpado é ele mesmo. Uma lição impiedosa sobre como a nossa percepção consciente consciente erra ao tentar fugir das forças estruturais profundas que nos governam.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="event-item">
-                        <div class="event-trigger" onclick="toggleAccordion(this)">
-                            <span class="event-name">As Bacantes (Eurípides)</span>
-                            <span class="event-meta">405 a.C.</span>
-                            <svg class="icon-arrow" width="12" height="12" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                        </div>
-                        <div class="event-body">
-                            <div class="event-desc">
-                                Escrita por Eurípides, ilustra o retorno trágico e avassalador do reprimido. O rei Penteu tenta usar leis e muros para barrar o culto dionisíaco (as pulsões, o caos, o irracional), e acaba sendo estraçalhado por essa mesma força que tentou recalcar.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="event-item">
-                        <div class="event-trigger" onclick="toggleAccordion(this)">
-                            <span class="event-name">Condenação e Morte de Sócrates</span>
-                            <span class="event-meta">399 a.C.</span>
-                            <svg class="icon-arrow" width="12" height="12" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                        </div>
-                        <div class="event-body">
-                            <div class="event-desc">
-                                O Estado ateniense executa democraticamente o filósofo sob a acusação de corromper a juventude. Na prática, a instituição eliminou o elemento incômodo que forçava a sociedade a questionar suas próprias ilusões e falsos discursos.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="event-item">
-                        <div class="event-trigger" onclick="toggleAccordion(this)">
-                            <span class="event-name">A República (Platão)</span>
-                            <span class="event-meta">375 a.C.</span>
-                            <svg class="icon-arrow" width="12" height="12" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                        </div>
-                        <div class="event-body">
-                            <div class="event-desc">
-                                Texto fundamental onde Platão projeta uma cidade ideal governada pela razão pura. É no Livro VII que se localiza a <strong>Alegoria da Caverna</strong>, revelando a mecânica da alienação institucionalizada: vivemos acorrentados a simulações e sombras da realidade, e a saída em busca da percepção real é um processo doloroso e rejeitado pela massa.
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <!-- PERÍODO HELENÍSTICO -->
-        <div class="period-block">
-            <div class="period-header p-helenistico" onclick="toggleAccordion(this)">
-                <span class="period-title">Período Helenístico</span>
-                <span class="period-date">323 a.C. – 31 a.C.</span>
-                <svg class="icon-arrow" width="16" height="16" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-            </div>
-            <div class="period-content">
-                <div class="period-text">
-                    Inicia-se com a morte de Alexandre, o Grande. A Polis perde a autonomia e os cidadãos integram impérios vastos e cosmopolitas. Diante da perda do controle político direto, a filosofia muda de foco: deixa de projetar o Estado ideal e passa a buscar ferramentas de blindagem psicológica e paz interior individual (como o Estoicismo e o Epicurismo).
-                </div>
-                <div class="events-list">
-                    <h4>Obras e Eventos Canônicos</h4>
-
-                    <div class="event-item">
-                        <div class="event-trigger" onclick="toggleAccordion(this)">
-                            <span class="event-name">Reinado e Conquistas de Alexandre, o Grande</span>
-                            <span class="event-meta">336 – 323 a.C.</span>
-                            <svg class="icon-arrow" width="12" height="12" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                        </div>
-                        <div class="event-body">
-                            <div class="event-desc">
-                                Unificação forçada do mundo grego e expansão militar fulminante até o Oriente. Alexandre destrói fronteiras e espalha a cultura helênica sob uma moldura imperial centralizada.
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <!-- IMPÉRIO ROMANO -->
-        <div class="period-block">
-            <div class="period-header p-imperio" onclick="toggleAccordion(this)">
-                <span class="period-title">Império Romano</span>
-                <span class="period-date">27 a.C. – 476 d.C.</span>
-                <svg class="icon-arrow" width="16" height="16" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-            </div>
-            <div class="period-content">
-                <div class="period-text">
-                    Centralização total do poder nas mãos de um autocrata (o Imperador). Uma máquina administrativa gigantesca fundada no pragmatismo jurídico e na força das legiões. Nesse cenário de tiranias estatais imprevisíveis, o pensamento estóico torna-se um código rigoroso de sobrevivência mental interna.
-                </div>
-                <div class="events-list">
-                    <h4>Obras e Eventos Canônicos</h4>
-
-                    <div class="event-item">
-                        <div class="event-trigger" onclick="toggleAccordion(this)">
-                            <span class="event-name">Reinado de Augusto</span>
-                            <span class="event-meta">27 a.C. – 14 d.C.</span>
-                            <svg class="icon-arrow" width="12" height="12" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                        </div>
-                        <div class="event-body">
-                            <div class="event-desc">
-                                Estabelecimento do Principado. Augusto constrói o discurso da "Pax Romana" — uma narrativa bonita de pacificação que ocultava a centralização total das decisões e o esvaziamento político das antigas magistraturas.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="event-item">
-                        <div class="event-trigger" onclick="toggleAccordion(this)">
-                            <span class="event-name">Tirania de Nero</span>
-                            <span class="event-meta">54 – 68 d.C.</span>
-                            <svg class="icon-arrow" width="12" height="12" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                        </div>
-                        <div class="event-body">
-                            <div class="event-desc">
-                                Período de desequilíbrio absolutista, perseguições políticas no seio de Roma e expurgos senatoriais. O poder estatal manifestado na sua forma mais volátil e perigosa.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="event-item">
-                        <div class="event-trigger" onclick="toggleAccordion(this)">
-                            <span class="event-name">Cartas a Lucílio (Sêneca)</span>
-                            <span class="event-meta">65 d.C.</span>
-                            <svg class="icon-arrow" width="12" height="12" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                        </div>
-                        <div class="event-body">
-                            <div class="event-desc">
-                                Escritas pelo filósofo estóico Sêneca enquanto ele tentava navegar pela psicopatia da corte de Nero. É um tratado de sobrevivência que desconstrói as ilusões de prestígio, a vaidade social e propõe que a única e real soberania que o homem possui reside no autodomínio e na consciência de seu próprio processo.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="event-item">
-                        <div class="event-trigger" onclick="toggleAccordion(this)">
-                            <span class="event-name">Reinado de Marco Aurélio</span>
-                            <span class="event-meta">161 – 180 d.C.</span>
-                            <svg class="icon-arrow" width="12" height="12" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                        </div>
-                        <div class="event-body">
-                            <div class="event-desc">
-                                O "imperador filósofo". Marco Aurélio governa Roma enquanto escreve suas notas pessoais (Meditações), aplicando o estoicismo não para fugir do peso institucional, mas para suportar o fardo de gerenciar as fronteiras em colapso do maior império do mundo ocidental.
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
     </div>
 </div>
-
-<script>
-    function toggleAccordion(element) {
-        // Encontra o container de conteúdo diretamente associado ao gatilho clicado
-        const content = element.nextElementSibling;
-        
-        // Alterna a classe visual active
-        element.classList.toggle('active');
-        
-        if (content.style.maxHeight && content.style.maxHeight !== "0px") {
-            content.style.maxHeight = "0px";
-        } else {
-            // Define o tamanho dinamicamente baseado no scrollHeight interno
-            content.style.maxHeight = content.scrollHeight + "px";
-        }
-
-        // Se for um bloco de período principal, ajusta a altura se os filhos forem abertos depois
-        event.stopPropagation();
-    }
-
-    // Ajuste dinâmico para accordions aninhados (eventos dentro de períodos)
-    document.querySelectorAll('.event-trigger').forEach(trigger => {
-        trigger.addEventListener('click', function() {
-            const periodContent = this.closest('.period-content');
-            if (periodContent) {
-                // Pequeno delay para esperar o cálculo do filho terminar
-                setTimeout(() => {
-                    periodContent.style.maxHeight = periodContent.scrollHeight + "px";
-                }, 100);
-            }
-        });
-    });
-</script>
 
 </body>
 </html>
