@@ -19,6 +19,11 @@
             --color-helenistico: #6d28d9;
             --color-republica: #991b1b;
             --color-imperio: #b45309;
+            
+            /* Cores dos Filtros */
+            --filter-bg: #1f2937;
+            --filter-hover: #374151;
+            --filter-active: #2563eb;
         }
 
         * {
@@ -42,7 +47,7 @@
 
         header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
 
         header h1 {
@@ -55,6 +60,39 @@
         header p {
             color: var(--text-muted);
             font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        /* Sistema de Filtros Temáticos */
+        .filters-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background-color: var(--filter-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        .filter-btn:hover {
+            background-color: var(--filter-hover);
+        }
+
+        .filter-btn.active {
+            background-color: var(--filter-active);
+            border-color: var(--filter-active);
+            color: #ffffff;
         }
 
         /* Layout Duas Colunas */
@@ -81,6 +119,7 @@
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             overflow: hidden;
+            transition: opacity 0.3s ease;
         }
 
         .period-header {
@@ -111,7 +150,7 @@
             color: rgba(255,255,255,0.9);
         }
 
-        /* Sistema de Accordion usando CSS Grid */
+        /* Sistema de Accordion */
         .accordion-wrapper {
             display: grid;
             grid-template-rows: 0fr;
@@ -162,6 +201,7 @@
         /* Itens de Eventos/Obras */
         .event-item {
             margin-bottom: 8px;
+            transition: opacity 0.3s ease;
         }
 
         .event-trigger {
@@ -172,7 +212,7 @@
             border-radius: 4px;
             transition: background 0.2s;
             user-select: none;
-            flex-wrap: wrap; /* Permite que a data quebre linha em telas muito pequenas */
+            flex-wrap: wrap;
         }
 
         .event-trigger:before {
@@ -234,6 +274,11 @@
         .bg-republica { background-color: var(--color-republica); }
         .bg-imperio { background-color: var(--color-imperio); }
 
+        /* Utilitários de Ocultação para os Filtros */
+        .hidden-by-filter {
+            display: none !important;
+        }
+
         @media (max-width: 900px) {
             .timeline-grid {
                 grid-template-columns: 1fr;
@@ -266,6 +311,14 @@
         <h1>Linha do Tempo Crítica da Antiguidade</h1>
         <p>Uma investigação visual sobre Percepção, Estruturas de Poder e a Desconstrução de Discursos Narrativos.</p>
     </header>
+
+    <!-- Filtros Temáticos -->
+    <div class="filters-container">
+        <button class="filter-btn active" onclick="applyFilter('todos', this)">Visão Geral (Todos)</button>
+        <button class="filter-btn" onclick="applyFilter('falha-ego', this)">A Falha do Ego</button>
+        <button class="filter-btn" onclick="applyFilter('peso-estado', this)">O Peso do Estado</button>
+        <button class="filter-btn" onclick="applyFilter('ilusao-realidade', this)">A Ilusão da Realidade</button>
+    </div>
 
     <div class="timeline-grid">
         <!-- COLUNA GRÉCIA -->
@@ -316,39 +369,39 @@
                             <div class="split-content">
                                 <div class="split-col">
                                     <h4>EVENTOS:</h4>
-                                    <div class="event-item">
+                                    <div class="event-item" data-category="peso-estado">
                                         <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
                                             <span class="event-name">Primeiros Jogos Olímpicos</span>
                                             <span class="event-date-badge">776 a.C.</span>
                                         </div>
                                         <div class="accordion-wrapper">
                                             <div class="accordion-content">
-                                                <div class="event-desc">Unificou culturalmente os povos gregos, transformando a violência guerreira em espetáculo ritualizado.</div>
+                                                <div class="event-desc">Unificou culturalmente os povos gregos, transformando a violência guerreira em espetáculo ritualizado sob a chancela do poder.</div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="split-col">
                                     <h4>OBRAS / TEXTOS:</h4>
-                                    <div class="event-item">
+                                    <div class="event-item" data-category="falha-ego ilusao-realidade">
                                         <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
                                             <span class="event-name">Ilíada e Odisseia (Homero)</span>
                                             <span class="event-date-badge">c. 750 a.C.</span>
                                         </div>
                                         <div class="accordion-wrapper">
                                             <div class="accordion-content">
-                                                <div class="event-desc">Sob o verniz das batalhas, esconde-se a primeira anatomia da fragilidade humana frente às forças institucionais.</div>
+                                                <div class="event-desc">Sob o verniz das batalhas, esconde-se a primeira anatomia da fragilidade humana frente às narrativas e forças institucionais.</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="event-item">
+                                    <div class="event-item" data-category="peso-estado">
                                         <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
                                             <span class="event-name">Teogonia (Hesíodo)</span>
                                             <span class="event-date-badge">c. 700 a.C.</span>
                                         </div>
                                         <div class="accordion-wrapper">
                                             <div class="accordion-content">
-                                                <div class="event-desc">Sistematiza o poder de Zeus. Registro seminal do <strong>Mito de Prometeu</strong>: a eterna tensão entre autonomia técnica humana e punição arbitrária.</div>
+                                                <div class="event-desc">Sistematiza o poder de Zeus. Registro seminal do <strong>Mito de Prometeu</strong>: a eterna tensão entre autonomia técnica humana e punição arbitrária do Estado/Deuses.</div>
                                             </div>
                                         </div>
                                     </div>
@@ -375,57 +428,57 @@
                             <div class="split-content">
                                 <div class="split-col">
                                     <h4>EVENTOS:</h4>
-                                    <div class="event-item">
+                                    <div class="event-item" data-category="peso-estado">
                                         <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
                                             <span class="event-name">Governo de Péricles</span>
                                             <span class="event-date-badge">461 — 429 a.C.</span>
                                         </div>
-                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">Apogeu de Atenas que alimentou a arrogância institucional.</div></div></div>
+                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">Apogeu de Atenas que alimentou a arrogância institucional e cimentou o poder através do monopólio da narrativa.</div></div></div>
                                     </div>
-                                    <div class="event-item">
+                                    <div class="event-item" data-category="peso-estado ilusao-realidade">
                                         <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
                                             <span class="event-name">Guerra do Peloponeso</span>
                                             <span class="event-date-badge">431 — 404 a.C.</span>
                                         </div>
-                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">Conflito destrutivo entre Atenas e Esparta, colapsando o ideal helênico.</div></div></div>
+                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">Conflito destrutivo entre Atenas e Esparta, colapsando a ilusão do ideal helênico.</div></div></div>
                                     </div>
-                                    <div class="event-item">
+                                    <div class="event-item" data-category="peso-estado ilusao-realidade">
                                         <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
                                             <span class="event-name">Condenação de Sócrates</span>
                                             <span class="event-date-badge">399 a.C.</span>
                                         </div>
-                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">A instituição elimina o elemento que forçava o questionamento das ilusões.</div></div></div>
+                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">A instituição elimina fisicamente o elemento que forçava a desconstrução das ilusões sociais da massa.</div></div></div>
                                     </div>
                                 </div>
                                 <div class="split-col">
                                     <h4>OBRAS / TEXTOS:</h4>
-                                    <div class="event-item">
+                                    <div class="event-item" data-category="peso-estado falha-ego">
                                         <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
                                             <span class="event-name">Antígona (Sófocles)</span>
                                             <span class="event-date-badge">441 a.C.</span>
                                         </div>
-                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">Embate destrutivo entre a lei do Estado (Creonte) e a ética do sujeito (Antígona).</div></div></div>
+                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">Embate destrutivo entre a lei arbitrária do Grande Outro (Estado) e a ética insubmissa do sujeito.</div></div></div>
                                     </div>
-                                    <div class="event-item">
+                                    <div class="event-item" data-category="falha-ego ilusao-realidade">
                                         <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
                                             <span class="event-name">Édipo Rei (Sófocles)</span>
                                             <span class="event-date-badge">429 a.C.</span>
                                         </div>
-                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">A cegueira do ego. Uma lição sobre como a nossa percepção consciente falha frente a forças estruturais.</div></div></div>
+                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">A anatomia da cegueira psíquica. O sujeito descobre que suas certezas conscientes são fraudes e que ele é operado por forças ocultas.</div></div></div>
                                     </div>
-                                    <div class="event-item">
+                                    <div class="event-item" data-category="falha-ego peso-estado">
                                         <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
                                             <span class="event-name">As Bacantes (Eurípides)</span>
                                             <span class="event-date-badge">405 a.C.</span>
                                         </div>
-                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">O retorno avassalador do reprimido. O irracional destroça o rei que tentou recalcar as pulsões por lei.</div></div></div>
+                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">O retorno avassalador do reprimido. A instituição estatal tenta recalcar a pulsão irracional e acaba estraçalhada por ela.</div></div></div>
                                     </div>
-                                    <div class="event-item">
+                                    <div class="event-item" data-category="ilusao-realidade peso-estado">
                                         <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
                                             <span class="event-name">A República (Platão)</span>
                                             <span class="event-date-badge">375 a.C.</span>
                                         </div>
-                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">Contém a <strong>Alegoria da Caverna</strong>: a mecânica da alienação institucionalizada e a dor da percepção real.</div></div></div>
+                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">Contém a <strong>Alegoria da Caverna</strong>: o trauma de descobrir que a realidade compartilhada é apenas uma narrativa fabricada por quem detém o poder de projetar as sombras.</div></div></div>
                                     </div>
                                 </div>
                             </div>
@@ -445,17 +498,24 @@
                     <div class="accordion-content">
                         <div class="period-inner-content">
                             <div class="period-text">
-                                A Polis perde autonomia e os cidadãos integram impérios vastos. A filosofia abandona o projeto de Estado e passa a buscar ferramentas de blindagem psicológica (Estoicismo/Epicurismo).
+                                A Polis perde autonomia e os cidadãos integram impérios vastos. Diante da máquina opressora, surgem escolas radicais de rejeição ou adaptação ao Grande Outro.
                             </div>
                             <div class="split-content">
                                 <div class="split-col">
                                     <h4>EVENTOS:</h4>
-                                    <div class="event-item">
+                                    <div class="event-item" data-category="peso-estado">
                                         <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
                                             <span class="event-name">Alexandre, o Grande</span>
                                             <span class="event-date-badge">336 — 323 a.C.</span>
                                         </div>
-                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">Unificação forçada e expansão militar, espalhando a cultura helênica sob um poder centralizado.</div></div></div>
+                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">Unificação forçada e aniquilação das autonomias locais. A força bruta se torna o único lastro da realidade.</div></div></div>
+                                    </div>
+                                    <div class="event-item" data-category="ilusao-realidade peso-estado">
+                                        <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
+                                            <span class="event-name">A Ruptura Cínica (Diógenes)</span>
+                                            <span class="event-date-badge">c. 323 a.C.</span>
+                                        </div>
+                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">A rejeição absoluta do sistema simbólico. Diógenes masturbava-se em público e zombava de reis, provando que a única imunidade contra a máquina institucional é cuspir nas expectativas que a sustentam.</div></div></div>
                                     </div>
                                 </div>
                                 <div class="split-col">
@@ -485,17 +545,17 @@
                     <div class="accordion-content">
                         <div class="period-inner-content">
                             <div class="period-text">
-                                Estabelecimento de um complexo sistema de freios institucionais gerido pelo Senado. Colapsou devido às contradições internas e ambições de generais autocráticos.
+                                Estabelecimento de um complexo sistema de freios institucionais gerido pelo Senado. Colapsou quando o poder militar se descolou do discurso legal.
                             </div>
                             <div class="split-content">
                                 <div class="split-col">
                                     <h4>EVENTOS:</h4>
-                                    <div class="event-item">
+                                    <div class="event-item" data-category="peso-estado">
                                         <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
                                             <span class="event-name">Assassinato de Júlio César</span>
                                             <span class="event-date-badge">44 a.C.</span>
                                         </div>
-                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">Choque entre a velha estrutura republicana e o avanço do poder pessoal. Precipita o fim da República.</div></div></div>
+                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">O colapso da velha narrativa republicana. O assassinato precipita a substituição da burocracia por um poder pessoal incontestável.</div></div></div>
                                     </div>
                                 </div>
                                 <div class="split-col">
@@ -519,48 +579,55 @@
                     <div class="accordion-content">
                         <div class="period-inner-content">
                             <div class="period-text">
-                                Centralização total do poder em um autocrata. Diante de tiranias estatais imprevisíveis, o pensamento estóico torna-se um código rigoroso de sobrevivência mental.
+                                Centralização total. A transição da Antiguidade para o alvorecer da Idade Média: o controle passa de vigilância física para vigilância psicológica interna.
                             </div>
                             <div class="split-content">
                                 <div class="split-col">
                                     <h4>EVENTOS:</h4>
-                                    <div class="event-item">
+                                    <div class="event-item" data-category="peso-estado ilusao-realidade">
                                         <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
                                             <span class="event-name">Ascensão de Augusto</span>
                                             <span class="event-date-badge">27 a.C. — 14 d.C.</span>
                                         </div>
-                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">Construção do discurso da "Pax Romana", ocultando a centralização total das decisões.</div></div></div>
+                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">A invenção da "Pax Romana": uma narrativa cosmética criada para anestesiar o esvaziamento político das antigas instituições livres.</div></div></div>
                                     </div>
-                                    <div class="event-item">
+                                    <div class="event-item" data-category="peso-estado">
                                         <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
                                             <span class="event-name">Tirania de Nero</span>
                                             <span class="event-date-badge">54 — 68 d.C.</span>
                                         </div>
-                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">Desequilíbrio absolutista e expurgos senatoriais. O poder estatal em sua forma mais volátil.</div></div></div>
+                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">O Leviatã sem freios. O Estado manifesta sua psicopatia pura através de expurgos e desequilíbrio absolutista.</div></div></div>
                                     </div>
-                                    <div class="event-item">
+                                    <div class="event-item" data-category="peso-estado ilusao-realidade">
                                         <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
                                             <span class="event-name">Governo de Marco Aurélio</span>
                                             <span class="event-date-badge">161 — 180 d.C.</span>
                                         </div>
-                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">O imperador aplica o estoicismo para suportar o fardo de gerenciar as fronteiras em colapso.</div></div></div>
+                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">A máquina pesada. O imperador estóico tenta manter a ordem externa enquanto reconhece a futilidade das glórias do império.</div></div></div>
                                     </div>
                                 </div>
                                 <div class="split-col">
                                     <h4>OBRAS / TEXTOS:</h4>
-                                    <div class="event-item">
+                                    <div class="event-item" data-category="ilusao-realidade peso-estado">
                                         <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
                                             <span class="event-name">Cartas a Lucílio (Sêneca)</span>
                                             <span class="event-date-badge">65 d.C.</span>
                                         </div>
-                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">Tratado de sobrevivência psicológica contra a psicopatia do poder de Nero e as ilusões de prestígio social.</div></div></div>
+                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">Manual de sobrevivência. Desconstrói a vaidade, o prestígio vazio e prova que a miséria existencial é fruto das exigências fúteis da sociedade.</div></div></div>
                                     </div>
-                                    <div class="event-item">
+                                    <div class="event-item" data-category="ilusao-realidade falha-ego">
                                         <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
                                             <span class="event-name">Meditações (Marco Aurélio)</span>
                                             <span class="event-date-badge">c. 161 — 180 d.C.</span>
                                         </div>
-                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">Diário pessoal do imperador estoico. Uma investigação sobre a efemeridade do poder e o domínio do próprio julgamento.</div></div></div>
+                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">A busca desesperada por manter o tribunal interno intacto diante do ruído incessante do poder político.</div></div></div>
+                                    </div>
+                                    <div class="event-item" data-category="falha-ego peso-estado">
+                                        <div class="event-trigger" onclick="this.parentElement.classList.toggle('open')">
+                                            <span class="event-name">Confissões (Agostinho de Hipona)</span>
+                                            <span class="event-date-badge">397 d.C.</span>
+                                        </div>
+                                        <div class="accordion-wrapper"><div class="accordion-content"><div class="event-desc">A invenção da neurose ocidental. Agostinho internaliza o olhar do poder: a transgressão deixa de ser apenas cívica para se tornar uma mancha inata no sujeito (o Pecado). A fundação do sujeito culpado.</div></div></div>
                                     </div>
                                 </div>
                             </div>
@@ -572,6 +639,56 @@
         </div>
     </div>
 </div>
+
+<script>
+    function applyFilter(category, btnElement) {
+        // Atualiza a aparência dos botões
+        const buttons = document.querySelectorAll('.filter-btn');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        btnElement.classList.add('active');
+
+        // Pega todos os itens e blocos
+        const allItems = document.querySelectorAll('.event-item');
+        const allBlocks = document.querySelectorAll('.period-block');
+
+        allItems.forEach(item => {
+            const itemCategories = item.getAttribute('data-category');
+            
+            // Lógica de exibição/ocultação baseada no filtro
+            if (category === 'todos') {
+                item.classList.remove('hidden-by-filter');
+            } else {
+                if (itemCategories && itemCategories.includes(category)) {
+                    item.classList.remove('hidden-by-filter');
+                } else {
+                    item.classList.add('hidden-by-filter');
+                }
+            }
+            
+            // Fecha os accordions internos sempre que trocar de filtro para manter a interface limpa
+            item.classList.remove('open');
+        });
+
+        // Comportamento dos grandes blocos (Períodos)
+        allBlocks.forEach(block => {
+            if (category === 'todos') {
+                // Ao voltar para 'Todos', apenas garante que os blocos fiquem fechados para evitar poluição visual
+                block.classList.remove('open');
+            } else {
+                // Se aplicou filtro específico, verifica se o bloco tem algum item visível
+                const visibleItems = Array.from(block.querySelectorAll('.event-item')).filter(item => !item.classList.contains('hidden-by-filter'));
+                
+                if (visibleItems.length > 0) {
+                    // Auto-expande o bloco para mostrar os resultados
+                    block.classList.add('open');
+                } else {
+                    // Recolhe se não houver nada visível daquela categoria
+                    block.classList.remove('open');
+                }
+            }
+        });
+    }
+</script>
 
 </body>
 </html>
